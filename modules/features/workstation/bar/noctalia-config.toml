@@ -90,7 +90,7 @@ pre_action_fade_seconds = 5
 auto_locate = true
 
 [lockscreen]
-allow_empty_password = true
+allow_empty_password = false
 blur_intensity = 0.99999997764825821
 tint_intensity = 0.24999999441206455
 
@@ -226,14 +226,9 @@ filename_pattern = "recording_%Y%m%d_%H%M%S"
 
 [plugins]
 enabled = [
-    "pozzoo/hassio",
     "noctalia/screen_recorder",
-    "noctalia/bitwarden",
     "icefish/phone-connect",
-    "cleboost/ssh-launcher",
-    "gabedunn/voxtype",
-    "rylos/tailnet",
-    "redxtech/super-productivity"
+    "cleboost/ssh-launcher"
 ]
 
     [[plugins.source]]
@@ -247,7 +242,7 @@ enabled = [
     name = "community"
 
 [shell]
-avatar_path = "/home/gabe/.face"
+avatar_path = "~/.face"
 clipboard_image_action_command = "satty -f {path}"
 date_format = "%A, %B %e, %Y"
 font_family = "Noto Sans"
@@ -257,7 +252,7 @@ password_style = "random"
 polkit_agent = true
 screen_time_enabled = true
 settings_show_advanced = true
-telemetry_enabled = true
+telemetry_enabled = false
 time_format = "{:%H:%M:%S}"
 
     [shell.animation]
@@ -269,7 +264,7 @@ time_format = "{:%H:%M:%S}"
     session_position = "center"
 
     [shell.screenshot]
-    directory = "/home/gabe/Pictures/Screenshots"
+    directory = "~/Pictures/Screenshots"
 
     [[shell.session.actions]]
     action = "lock"
@@ -300,15 +295,6 @@ time_format = "{:%H:%M:%S}"
     variant = "default"
 
     [[shell.session.actions]]
-    action = "command"
-    command = "systemctl reboot --boot-loader-entry=auto-windows"
-    countdown_seconds = 0.0
-    enabled = true
-    glyph = "brand-windows"
-    label = "Windows"
-    variant = "default"
-
-    [[shell.session.actions]]
     action = "shutdown"
     countdown_seconds = 0.0
     enabled = true
@@ -322,24 +308,12 @@ mode = "dark"
 source = "custom"
 
 [wallpaper]
-directory = "/home/gabe/Pictures/Wallpaper"
+directory = "~/Pictures/Wallpaper"
 transition_on_startup = true
 
     [wallpaper.automation]
     enabled = true
     interval_seconds = 3600
-
-    [wallpaper.default]
-    path = "/home/gabe/Pictures/Wallpaper/all_I_need_4k.png"
-
-    [wallpaper.last]
-    path = "/home/gabe/Pictures/Wallpaper/all_I_need_4k.png"
-
-    [wallpaper.monitors.DP-1]
-    path = "/home/gabe/Pictures/Wallpaper/all_I_need_4k.png"
-
-    [wallpaper.monitors.DP-2]
-    path = "/home/gabe/Pictures/Wallpaper/all_I_need_4k.png"
 
 [widget.active_window]
 capsule = true

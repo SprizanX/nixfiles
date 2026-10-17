@@ -8,7 +8,7 @@
           settings = {
             trusted-users = [
               "root"
-              "gabe"
+              "sans"
               "@wheel"
             ];
             experimental-features = [
@@ -17,11 +17,9 @@
             ];
             substituters = [
               "https://nix-community.cachix.org"
-              "https://gabedunn.cachix.org"
             ];
             trusted-public-keys = [
               "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-              "gabedunn.cachix.org-1:wLWTKadNjpr2Op3rBnDZMUmUEPPIoKG87oY4PmBP8qU="
             ];
             auto-optimise-store = lib.mkDefault true;
             warn-dirty = false;
@@ -53,7 +51,7 @@
           # nix helper tool
           programs.nh = {
             enable = true;
-            flake = "/home/gabe/Code/nixfiles";
+            flake = "/home/sans/nixfiles";
             clean = {
               enable = true;
               extraArgs = "--keep-since 4d --keep 3";
@@ -64,14 +62,6 @@
           # enable hard-linking in nix store
           nix.optimise.automatic = true;
         }
-        ({ config, ... }: {
-          # provide nix access-tokens with sops
-          nix.extraOptions = ''
-            !include ${config.sops.secrets."nix-access-tokens".path}
-          '';
-
-          sops.secrets.nix-access-tokens.sopsFile = ../secrets/hosts/common/secrets.yaml;
-        })
       ];
 
       homeManager =
@@ -81,7 +71,7 @@
             inherit (cfg) nix nixpkgs;
 
             # tell nh where to find the flake
-            home.sessionVariables.NH_FLAKE = "${config.home.homeDirectory}/Code/nixfiles";
+            home.sessionVariables.NH_FLAKE = "${config.home.homeDirectory}/nixfiles";
           }
           # merge omitted substituters to user nix config
           {

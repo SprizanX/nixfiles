@@ -67,6 +67,12 @@
               keyboard = {
                 repeat-rate = 40;
                 repeat-delay = 240;
+
+                xkb = {
+                  layout = "us,ru";
+                  # change to "grp:caps_toggle" if you prefer switching with caps lock
+                  options = "grp:alt_shift_toggle";
+                };
               };
 
               touchpad = {

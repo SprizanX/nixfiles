@@ -70,13 +70,6 @@
           };
 
           scdaemonSettings.disable-ccid = true;
-
-          publicKeys = [
-            {
-              source = ../../../users/gabe/pgp.asc;
-              trust = 5;
-            }
-          ];
         };
 
         # TODO: enable gpg in firefox ?

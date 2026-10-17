@@ -105,7 +105,6 @@
             comma # run nix commands with ,
             cowsay # make a cow say something
             cpufetch # cpu info
-            inputs'.deploy-rs.packages.deploy-rs # deploy nixos configs
             dex # desktop entry launcher
             # diffsitter # better diff
             dig # dns lookup
@@ -121,7 +120,6 @@
             frogmouth # markdown reader
             # fx # better jq
             # gallery-dl # download images
-            home-assistant-cli # home assistant cli
             hyfetch # neofetch fork
             libnotify # desktop notifications
             libsecret # secrets manager
@@ -150,7 +148,6 @@
             rsync # file transfer
             rsyncy # progress bar for rsync
             sd # better sed
-            sops # secrets manager
             sshfs # mount ssh filesystems
             steam-run # run binaries in steam FHS
             # streamrip # download music
@@ -216,9 +213,6 @@
               ns = "nix shell";
               nf = "nix flake";
 
-              # build nixos iso file
-              nbsiso = "nix build .#nixosConfigurations.nixiso.config.formats.iso";
-
               # home manager
               hm = "home-manager --flake $FLAKE";
               hmsb = "${hm} switch -b backup";
@@ -237,7 +231,6 @@
               # general aliaes
               cik = "clone-in-kitty --type os-window";
               ck = cik;
-              deploy = "deploy -s";
               dirties = "watch -d grep -e Dirty: -e Writeback: /proc/meminfo";
               jc = "journalctl -xeu";
               jcu = "journalctl --user -xeu";
@@ -258,14 +251,9 @@
               starwars = "telnet towel.blinkenlights.nl";
             };
 
-          # ensure systemd processes restart triggers after sops materializes secrets
-          activation.atuin-key-ready = lib.hm.dag.entryBetween [ "reloadSystemd" ] [ "sops-nix" ] "";
-
           sessionVariables = {
             DIRENV_LOG_FORMAT = "";
             ENTE_CLI_CONFIG_DIR = "${config.xdg.configHome}/ente";
-            FFSEND_HOST = "https://send.super.fish";
-            KARAKEEP_SERVER_ADDR = "https://karakeep.super.fish";
             KUBECONFIG = "${config.xdg.configHome}/kube/config";
             PF_INFO = "ascii title os kernel uptime shell term desktop scheme palette";
             PNPM_HOME = "${config.xdg.dataHome}/pnpm";
@@ -288,28 +276,17 @@
           daemon.enable = true;
           forceOverwriteSettings = true;
           settings = {
-            sync_address = "https://atuin.super.fish";
             enter_accept = true;
             filter_mode_shell_up_key_binding = "session";
             keymap_mode = "vim-insert";
             dotfiles.enabled = true;
-            key_path = config.sops.secrets.atuin-key.path;
             daemon.sync_frequency = 300;
             keys = {
               accept_past_line_start = true;
               accept_with_backspace = true;
             };
-            ai = {
-              enabled = true;
-              endpoint = "https://atuin-ai.super.fish";
-            };
           };
         };
-
-        # restart atuin when its encrypted key source changes
-        systemd.user.services.atuin-daemon.Unit.X-Restart-Triggers = [
-          "${config.sops.secrets.atuin-key.sopsFile}"
-        ];
 
         programs.btop = {
           enable = true;
@@ -406,29 +383,8 @@
             sponsorblock-mark = "all";
           };
         };
-
-        sops.secrets.atuin-key.sopsFile = ../../../../secrets/users/gabe/secrets.yaml;
       };
   };
-
-  perSystem =
-    { pkgs, ... }:
-    {
-      # login to atuin, run with `secretspec run -- nix run .#atuin-login`
-      apps.atuin-login = {
-        type = "app";
-        program = pkgs.writeShellApplication {
-          name = "atuin-login";
-          runtimeInputs = [ pkgs.atuin ];
-          text = ''
-            : "''${ATUIN_PASSWORD:?ATUIN_PASSWORD must be set}"
-
-            exec atuin login -u gabe -p "$ATUIN_PASSWORD"
-          '';
-        };
-        meta.description = "Log in to the Atuin sync server";
-      };
-    };
 
   flake-file.inputs.nix-autobahn = {
     url = "github:lassulus/nix-autobahn";

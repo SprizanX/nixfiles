@@ -14,7 +14,8 @@
             configurationLimit = lib.mkDefault 5;
             consoleMode = "max";
           };
-          timeout = lib.mkDefault 1;
+          # long enough to pick an entry on a dual boot machine
+          timeout = lib.mkDefault 5;
           efi.canTouchEfiVariables = true;
         };
 
@@ -46,6 +47,7 @@
         # TODO: maybe pull from parsed filesystems?
         supportedFilesystems = {
           inherit (cfg.fs) btrfs zfs;
+          ntfs = true; # read the windows ntfs partitions
         };
 
         zfs.forceImportRoot = false;

@@ -14,11 +14,9 @@ When a command returns JSON, use `jq` whenever possible and explicitly select on
 
 - **Codebase memory:** use the `codebase-memory` MCP before broad grep/find when answering structural code questions. Index an unrecognized repository with `index_repository`, inspect it with `get_architecture` or `get_graph_schema`, and verify returned symbols against source before editing.
 - **GitHub:** use `gh-axi` for GitHub operations and `gh-axi api` for uncovered endpoints. Follow its contextual next-step hints and use command-specific field filters to keep output compact. Use the underlying `gh` directly only when `gh-axi` lacks the required capability, and identify that gap first.
-- **Home Assistant:** load the `home-assistant-cli` skill and use `hass-cli` for state, history, and service operations.
-- **Karakeep:** use `karakeep --json` for Karakeep operations instead of the MCP server. Prefer bounded `bookmarks search ... --limit <count>` calls, then fetch only needed text with `bookmarks content <id> --format markdown --max-chars <count>`. Use `karakeep <command> --help` for unfamiliar operations.
 - **Obsidian:** load the `obsidian-cli` skill and use the official `obsidian` CLI for vault operations.
 - **Terminal multiplexers:** load the `cyber-mux` skill and use `cyber-mux` instead of calling `tmux` or `herdr` directly. Use it for visible or persistent panes, interactive or long-running processes outside the current shell, existing-pane control, and pane-associated Git worktrees. Use ordinary shell tools for one-shot non-interactive commands and builtin subagents for delegation that does not need a visible terminal.
 
-Keep using the configured MCP for Nix ecosystem research, Super Productivity, Liftosaur, and Strava. Keep using Kagi MCP until a supported Kagi CLI exists.
+Keep using the configured MCP for Nix ecosystem research and Super Productivity.
 
 If a preferred CLI lacks a required capability, identify the gap before falling back to its MCP. Use `<command> --help` rather than guessing flags.

@@ -3,7 +3,6 @@
 {
   den.aspects.ai = {
     includes = [
-      den.aspects.cliproxyapi
       den.aspects.herdr
       den.aspects.mcp
       den.aspects.workmux
@@ -38,11 +37,8 @@
             selfPackages.docker-axi
             selfPackages.gh-axi
             selfPackages.gws-axi
-            selfPackages.kagi-mcp
-            selfPackages.karakeep-cli
             selfPackages.kubernetes-axi
             selfPackages.mcp-remote
-            selfPackages.strava-mcp
             selfPackages.super-productivity-mcp
             selfPackages.workspace-mcp
           ];

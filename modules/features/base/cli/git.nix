@@ -17,8 +17,9 @@
         enable = true;
 
         settings = {
-          user.name = "Gabe Dunn";
-          user.email = "gabe@gabedunn.dev";
+          user.name = "Sans";
+          # TODO: set your real git email
+          user.email = "sans@localhost";
 
           alias = {
             last = "log -1 --stat";

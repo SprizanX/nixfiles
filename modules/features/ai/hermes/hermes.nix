@@ -2,10 +2,7 @@
 
 {
   den.aspects.hermes = {
-    nixos = { host, config, ... }: {
-      network.services.hermes =
-        config.home-manager.users.${host.settings.base.primaryUser}.services.hermes-agent.dashboard.port;
-
+    nixos = { ... }: {
       # enable accessibility service for hermes computer_use skill
       services.gnome.at-spi2-core.enable = true;
       systemd.user.services.at-spi-dbus-bus.wantedBy = [ "graphical-session.target" ];
@@ -24,6 +21,11 @@
         llmAgentsPackages = inputs'.llm-agents.packages;
         selfPackages = self'.packages;
         hermesPythonPackages = config.services.hermes-agent.package.python.pkgs;
+
+        # API keys live outside the nix store. Create the file and it gets picked
+        # up on the next rebuild; until then hermes starts without it.
+        hermesEnvFile = "${config.home.homeDirectory}/.hermes/hermes.env";
+
         honchoSource = pkgs.fetchFromGitHub {
           owner = "plastic-labs";
           repo = "honcho";
@@ -77,39 +79,16 @@
               codebase-memory.command = lib.getExe self'.packages.codebase-memory-mcp;
               nixos.command = lib.getExe pkgs.mcp-nixos;
               super-productivity.command = lib.getExe self'.packages.super-productivity-mcp;
-              fastmail = {
-                url = "https://api.fastmail.com/mcp";
-                headers.Authorization = "Bearer \${MCP_FASTMAIL_KEY}";
-                timeout = 180;
-              };
-              strava.command = lib.getExe self'.packages.strava-mcp;
-              liftosaur = {
-                url = "https://www.liftosaur.com/mcp";
-                headers.Authorization = "Bearer \${MCP_LIFTOSAUR_KEY}";
-                timeout = 180;
-              };
-              kagi = {
-                url = "https://mcp.kagi.com/mcp";
-                headers.Authorization = "Bearer \${MCP_KAGI_KEY}";
-                timeout = 180;
-              };
-              karakeep = {
-                command = lib.getExe self'.packages.karakeep-mcp;
-                env = {
-                  KARAKEEP_API_ADDR = "https://karakeep.super.fish";
-                  KARAKEEP_API_KEY = "\${MCP_KARAKEEP_KEY}";
-                };
-              };
             };
           };
 
-          environmentFiles = [ config.sops.secrets."hermes.env".path ];
+          inherit (lib.optional (builtins.pathExists hermesEnvFile) hermesEnvFile) { };
+          environmentFiles = lib.optional (builtins.pathExists hermesEnvFile) hermesEnvFile;
           environment.CUA_DRIVER_RS_ENABLE_WAYLAND = "1";
 
           extraPackages = [
             pkgs.defuddle
             pkgs.ffmpeg-full
-            pkgs.home-assistant-cli
             pkgs.jq
             pkgs.mcp-nixos
             pkgs.obsidian
@@ -119,11 +98,8 @@
             selfPackages.docker-axi
             selfPackages.gh-axi
             selfPackages.gws-axi
-            selfPackages.kagi-mcp
-            selfPackages.karakeep-cli
             selfPackages.kubernetes-axi
             selfPackages.mcp-remote
-            selfPackages.strava-mcp
             selfPackages.super-productivity-mcp
             selfPackages.workspace-mcp
             llmAgentsPackages.rtk
@@ -184,8 +160,6 @@
             }
           }/clean-webui.yaml";
         };
-
-        sops.secrets."hermes.env".sopsFile = ../../../../secrets/users/gabe/hermes.yaml;
       };
   };
 

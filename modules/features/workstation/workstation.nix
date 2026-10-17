@@ -6,8 +6,6 @@
 
     includes = [
       den.aspects.base
-      den.aspects.cockpit
-      den.aspects.portainer
       den.aspects.display-manager
       den.aspects.window-manager
 
@@ -31,7 +29,6 @@
       # apps
       den.aspects.browser
       den.aspects.chat
-      den.aspects.email
       den.aspects.file-browser
       den.aspects.image-viewer
       den.aspects.misc-apps

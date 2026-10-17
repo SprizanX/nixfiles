@@ -7,13 +7,13 @@
 
       primaryUser = lib.mkOption {
         type = lib.types.str;
-        default = "gabe";
+        default = "sans";
         description = "Primary user for permissions and defaults.";
       };
 
       tz = lib.mkOption {
         type = lib.types.str;
-        default = "America/Vancouver";
+        default = "Europe/Moscow";
         description = "The timezone of the machine.";
       };
 
@@ -67,17 +67,12 @@
       den.aspects.networking
       den.aspects.nix-config
       den.aspects.root
-      den.aspects.secrets
       den.aspects.security
       den.aspects.style
       den.aspects.virtualisation
       den.aspects.virtualisation._.containers
 
-      den.aspects.auto-mount
-      den.aspects.backup
       den.aspects.ssh
-      den.aspects.moshi
-      den.aspects.tailscale # TODO: move to network
     ];
 
     nixos =
@@ -91,8 +86,6 @@
         cfg = host.settings.base;
       in
       {
-        networking.domain = lib.mkDefault "sucha.foo";
-
         time.timeZone = lib.mkDefault cfg.tz;
 
         # nixos-native user management
@@ -118,10 +111,10 @@
         services.gvfs.enable = lib.mkDefault true;
         services.irqbalance.enable = lib.mkDefault true;
         services.zfs.autoSnapshot.enable = lib.mkDefault cfg.fs.zfs;
-        i18n.defaultLocale = "en_CA.UTF-8";
+        i18n.defaultLocale = "en_US.UTF-8";
         i18n.extraLocales = [
-          "en_CA.UTF-8/UTF-8"
           "en_US.UTF-8/UTF-8"
+          "ru_RU.UTF-8/UTF-8"
         ];
 
         # docker changes
@@ -158,7 +151,7 @@
       };
 
     homeManager = {
-      home.language.base = "en_CA.UTF-8";
+      home.language.base = "en_US.UTF-8";
 
       systemd.user.startServices = "sd-switch";
 

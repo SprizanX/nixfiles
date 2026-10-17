@@ -60,33 +60,23 @@
               screenshot.directory = "${config.xdg.userDirs.pictures}/Screenshots";
             };
 
-            wallpaper =
-              let
-                wp_dir = "${config.xdg.userDirs.pictures}/Wallpaper";
-              in
-              {
-                directory = wp_dir;
-                default.path = "${wp_dir}/new_beginning_4k.png";
-                last.path = "${wp_dir}/new_beginning_4k.png";
-                monitors.DP-1.path = "${wp_dir}/new_beginning_4k.png";
-                monitors.DP-2.path = "${wp_dir}/new_beginning_4k.png";
-                monitors.Virtual-1.path = "${wp_dir}/new_beginning_4k.png";
-              };
+            wallpaper.directory = "${config.xdg.userDirs.pictures}/Wallpaper";
 
-            lockscreen_widgets = builtins.fromTOML (
-              builtins.readFile ./lockscreen-widgets/${host.hostName}.toml
-            );
-          };
-        };
-
-        sops.secrets = {
-          bitwarden = {
-            sopsFile = ../../../../secrets/users/gabe/noctalia.yaml;
-            path = config.xdg.configHome + "/noctalia/bitwarden.toml";
-          };
-          hassio = {
-            sopsFile = ../../../../secrets/users/gabe/noctalia.yaml;
-            path = config.xdg.configHome + "/noctalia/hassio.toml";
+            # macos-style dock for the running apps, in addition to the bar
+            dock = {
+              enabled = true;
+              position = "bottom";
+              icon_size = 42;
+              magnification = true;
+              magnification_scale = 1.45;
+              active_scale = 1.0;
+              show_running = true;
+              show_dots = true;
+              auto_hide = false;
+              reserve_space = true;
+              radius = 18;
+              launcher_position = "start";
+            };
           };
         };
       };
@@ -101,15 +91,13 @@
         program = pkgs.writeShellApplication {
           name = "write-noctalia";
           runtimeInputs = with pkgs; [
-            inputs.noctalia.packages.${stdenv.hostPlatform.system}.default
-            yq-go
+            inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
           ];
           text = ''
-            noctalia config export > ~/Code/nixfiles/modules/features/workstation/bar/noctalia-config.toml
-            noctalia config export | yq -p toml -o toml '.lockscreen_widgets' > ~/Code/nixfiles/modules/features/workstation/bar/lockscreen-widgets/"$(hostname).toml"
+            noctalia config export > ~/nixfiles/modules/features/workstation/bar/noctalia-config.toml
           '';
         };
-        meta.description = "Export noctalia config to a file, and export the device-specific lockscreen widgets";
+        meta.description = "Export noctalia config to a file";
       };
     };
 

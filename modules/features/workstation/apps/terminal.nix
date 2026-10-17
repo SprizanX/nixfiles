@@ -131,10 +131,8 @@
               # modify_font cell_height               125%
 
               # kitty-scrollback.nvim: kitten alias
-              action_alias kitty_scrollback_nvim kitten /home/gabe/.local/share/nvim/lazy/kitty-scrollback.nvim/python/kitty_scrollback_nvim.py
-              map kitty_mod+h kitty_scrollback_nvim                                                                                                                 # browse scrollback buffer in nvim
-              map kitty_mod+g kitty_scrollback_nvim --config ksb_builtin_last_cmd_output                                                                            # browse output of the last shell command in nvim
-              mouse_map ctrl+shift+right press ungrabbed combine : mouse_select_command_output : kitty_scrollback_nvim --config ksb_builtin_last_visited_cmd_output # show clicked command output in nvim
+              # map kitty_mod+h kitty_scrollback_nvim
+              # map kitty_mod+g kitty_scrollback_nvim --config ksb_builtin_last_cmd_output
             '';
           };
 

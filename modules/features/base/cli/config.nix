@@ -1,21 +1,14 @@
 {
   den.aspects.cli-config = {
     homeManager =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
       {
         xdg.configFile."ente/config.yaml".source =
           let
             settingsFormat = pkgs.formats.yaml { };
-            settings.endpoint.api = "https://api.photos.super.fish";
+            settings.endpoint.api = "https://api.ente.io";
           in
           settingsFormat.generate "config.yaml" settings;
-
-        sops.secrets.streamrip = {
-          key = "config.toml";
-          sopsFile = ../../../../secrets/users/gabe/streamrip.yaml;
-          path = "${config.xdg.configHome}/streamrip/config.toml";
-          mode = "0740";
-        };
       };
   };
 }

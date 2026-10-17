@@ -20,8 +20,9 @@
       ];
     };
 
-    # machine fails to boot with filesystems configured
-    disko.devices.disk.main = lib.mkForce { };
+    # machine fails to boot with the host's filesystems configured
+    fileSystems = lib.mkForce { };
+    swapDevices = lib.mkForce [ ];
   };
 
   # enables `nix run .#vm`. it is very useful to have a VM
@@ -34,7 +35,7 @@
         name = "vm";
         text =
           let
-            machine = "voyager";
+            machine = "sprizan";
             host = inputs.self.nixosConfigurations.${machine}.config;
           in
           ''

@@ -24,7 +24,7 @@
           configPath = "${config.xdg.configHome}/mozilla/firefox";
 
           profiles = {
-            gabe = {
+            sans = {
               settings = {
                 "browser.aboutConfig.showWarning" = false;
                 "browser.bookmarks.restore_default_bookmarks" = false;
@@ -57,26 +57,17 @@
                 "svg.context-properties.content.enabled" = true;
                 "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
-                "layout.frame_rate" = 144;
+                "layout.frame_rate" = 180;
                 "gfx.vsync.force-disable-waitforvblank" = true;
 
                 "browser.newtabpage.pinned" = [
-
-                  {
-                    url = "https://betaapp.fastmail.com/mail/Inbox";
-                    label = "fastmail";
-                  }
                   {
                     url = "https://www.youtube.com/";
                     label = "yt";
                   }
                   {
-                    url = "https://github.com/redxtech";
+                    url = "https://github.com/";
                     label = "github";
-                  }
-                  {
-                    url = "https://karakeep.super.fish/";
-                    label = "karakeep";
                   }
                   {
                     url = "https://dd.reddit.com/";
@@ -87,19 +78,10 @@
                     label = "hn";
                   }
                   {
-                    url = "https://chat.super.fish";
-                    label = "chat";
-                  }
-                  {
-                    url = "https://photos.super.fish/";
-                    label = "photos";
-                  }
-                  {
                     url = "https://photos.google.com/";
                     label = "googlephotos";
                   }
                   { url = "https://hoppscotch.io/"; }
-                  { url = "https://gabedunn.dev/"; }
                   {
                     url = "https://monkeytype.com/";
                     label = "monkeytype";
@@ -117,7 +99,7 @@
 
               search = {
                 force = true;
-                default = "Kagi";
+                default = "ddg";
                 order = [
                   "Kagi"
                   "ddg"
@@ -319,14 +301,14 @@
             other = {
               id = 1;
               name = "other";
-              inherit (config.programs.firefox.profiles.gabe)
+              inherit (config.programs.firefox.profiles.sans)
                 settings
                 userChrome
                 userContent
                 ;
 
               search = {
-                inherit (config.programs.firefox.profiles.gabe.search)
+                inherit (config.programs.firefox.profiles.sans.search)
                   force
                   default
                   order
@@ -426,8 +408,8 @@
               exit 1
             fi
 
-            prefs="''${XDG_CONFIG_HOME:-$HOME/.config}/mozilla/firefox/gabe/prefs.js"
-            output="$HOME/Code/nixfiles/modules/features/workstation/apps/browser/uiCustomization.json"
+            prefs="''${XDG_CONFIG_HOME:-$HOME/.config}/mozilla/firefox/sans/prefs.js"
+            output="$HOME/nixfiles/modules/features/workstation/apps/browser/uiCustomization.json"
 
             # validate before replacing the file, and keep the rename on the same filesystem
             temporary=$(mktemp "$(dirname "$output")/.uiCustomization.XXXXXX")

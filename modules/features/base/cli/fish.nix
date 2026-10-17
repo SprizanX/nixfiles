@@ -139,14 +139,6 @@
             '';
           };
 
-          rdeploy = {
-            description = "Remotely deploys a NixOS machine with deploy-rs";
-            wraps = "deploy";
-            body = ''
-              deploy --targets "$FLAKE#$argv[1]"
-            '';
-          };
-
           hclients = {
             description = "List important information about hyprctl clients";
             body = ''
@@ -391,14 +383,6 @@
 
           # use fish for nix shells
           ${pkgs.any-nix-shell}/bin/any-nix-shell fish | source
-
-          # add completion for nixos-rebuild-remote
-          # complete -c nixos-rebuild-remote -a '(__fish_nixos_remote_complete)' -f
-          # complete -c cdeploy -a '(__fish_nixos_remote_complete)' -f
-          # complete -c rdeploy -a '(__fish_nixos_remote_complete)' -f
-
-          # add completion for home assistant cli
-          eval (_HASS_CLI_COMPLETE=fish_source ${pkgs.home-assistant-cli}/bin/hass-cli)
         '';
 
         shellInit = language "fish" ''
@@ -406,13 +390,7 @@
           if test -f ${config.xdg.configHome}/fish/env.local.fish;
             source ${config.xdg.configHome}/fish/env.local.fish
           end
-
-          if test -f ${config.sops.secrets."local.env".path};
-            source ${config.sops.secrets."local.env".path}
-          end
         '';
       };
-
-      sops.secrets."local.env".sopsFile = ../../../../secrets/users/gabe/env.yaml;
     };
 }

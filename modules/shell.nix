@@ -15,12 +15,8 @@
 
           # secrets
           age
-          age-plugin-yubikey
           bitwarden-cli
           bws
-          ssh-to-age
-          sops
-          self'.packages.secretspec
 
           # nix specific tooling
           nil
@@ -30,12 +26,8 @@
           statix
           just
 
-          # remote deploy
-          inputs'.deploy-rs.packages.deploy-rs
-
           # ci
           omnix
-          inputs'.odu.packages.default
 
           # ai tooling
           mcp-nixos

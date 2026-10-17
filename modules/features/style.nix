@@ -70,6 +70,14 @@
         { pkgs, self', ... }:
         {
           stylix.targets.rofi.enable = false;
+
+          # drive noctalia's palette from the stylix palette so the bar, dock and
+          # every other themed app agree on colours
+          stylix.targets.noctalia.enable = true;
+
+          # to generate the palette from a wallpaper instead of the base16 scheme
+          # above, set `stylix.image = /path/to/wallpaper.png;` in the nixos block
+
           fonts.fontconfig.antialiasing = true;
           home.pointerCursor.enable = true;
           home.packages = extraFonts pkgs self'.packages.input-custom;

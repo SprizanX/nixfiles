@@ -201,11 +201,9 @@
       };
 
       excludedPackages = [
-        "bastion"
         "plex-pass-raw"
-        "quasar"
+        "sprizan"
         "vm"
-        "voyager"
         "write-flake"
         "write-inputs"
         "write-lock"

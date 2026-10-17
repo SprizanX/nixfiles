@@ -546,10 +546,7 @@
               activation.hermes-agent-setup =
                 lib.hm.dag.entryBetween
                   [ "reloadSystemd" ]
-                  [
-                    "writeBoundary"
-                    "sops-nix"
-                  ]
+                  [ "writeBoundary" ]
                   ''
                     run mkdir -p \
                       ${lib.escapeShellArg hermesHome} \

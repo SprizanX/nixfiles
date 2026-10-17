@@ -4,7 +4,6 @@
   den.aspects.spotify = {
     homeManager =
       {
-        config,
         inputs',
         pkgs,
         lib,
@@ -65,14 +64,11 @@
             border_type = "Rounded";
 
             notify_streaming_only = true;
-            enable_streaming = "DaemonOnly";
+            enable_streaming = "Always";
 
-            # app's default client_id
+            # the app's built-in client id
+            # to use your own, add client_id_command pointing at a secret store
             client_id = "46e5005a11c34100bf0af93e78e21c9b";
-            client_id_command = {
-              command = lib.getExe' pkgs.coreutils "cat";
-              args = [ config.sops.secrets.spotify-player-client-id.path ];
-            };
 
             default_device = "spotify-player";
             device = {
@@ -97,28 +93,6 @@
             }
           ];
         };
-
-        services.spotifyd = {
-          enable = true;
-
-          settings = {
-            global = {
-              username = "redxtech";
-              password_cmd = "${lib.getExe' pkgs.coreutils "cat"} ${config.sops.secrets.spotifyd.path}";
-
-              use_mpris = true;
-              backend = "pulseaudio"; # TODO: try "pipe"
-
-              device_type = "computer";
-              device_name = "desktop-spotifyd";
-
-              bitrate = 320;
-            };
-          };
-        };
-
-        sops.secrets.spotify-player-client-id.sopsFile = ../../../../secrets/users/gabe/secrets.yaml;
-        sops.secrets.spotifyd.sopsFile = ../../../../secrets/users/gabe/secrets.yaml;
       };
   };
 
