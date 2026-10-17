@@ -4,7 +4,6 @@
   den.aspects.security = {
     includes = [
       den.aspects.av
-      den.aspects.yubikey
     ];
 
     nixos = { host, pkgs, ... }: {

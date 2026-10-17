@@ -2,10 +2,7 @@
 
 {
   den.aspects.bar = {
-    includes = [
-      den.aspects.noctalia-plugins
-      den.aspects.idle-inhibit
-    ];
+    includes = [ den.aspects.idle-inhibit ];
 
     nixos =
       {
@@ -47,35 +44,33 @@
             ]
           );
 
-        programs.noctalia = {
-          enable = true;
+          programs.noctalia = {
+            enable = true;
+            checkConfig = true;
 
-          package = inputs'.noctalia.packages.default;
+            package = inputs'.noctalia.packages.default;
 
-          systemd.enable = true;
+            systemd.enable = true;
 
-          settings = lib.recursiveUpdate (builtins.fromTOML (builtins.readFile ./noctalia-config.toml)) {
-            shell = {
-              avatar_path = "${config.home.homeDirectory}/.face";
-              screenshot.directory = "${config.xdg.userDirs.pictures}/Screenshots";
-            };
+            settings = lib.recursiveUpdate (builtins.fromTOML (builtins.readFile ./noctalia-config.toml)) {
+              shell.screenshot.directory = "${config.xdg.userDirs.pictures}/Screenshots";
+              wallpaper.directory = "${config.xdg.userDirs.pictures}/Wallpaper";
 
-            wallpaper.directory = "${config.xdg.userDirs.pictures}/Wallpaper";
-
-            # macos-style dock for the running apps, in addition to the bar
-            dock = {
-              enabled = true;
-              position = "bottom";
-              icon_size = 42;
-              magnification = true;
-              magnification_scale = 1.45;
-              active_scale = 1.0;
-              show_running = true;
-              show_dots = true;
-              auto_hide = false;
-              reserve_space = true;
-              radius = 18;
-              launcher_position = "start";
+              # macos-style dock for the running apps, in addition to the bar
+              dock = {
+                enabled = true;
+                position = "bottom";
+                icon_size = 42;
+                magnification = true;
+                magnification_scale = 1.45;
+                active_scale = 1.0;
+                show_running = true;
+                show_dots = true;
+                auto_hide = false;
+                reserve_space = true;
+                radius = 18;
+                launcher_position = "start";
+              };
             };
           };
         };

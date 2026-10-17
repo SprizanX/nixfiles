@@ -22,7 +22,7 @@
           type = listOf (submodule {
             options = {
               name = mkOption {
-                type = str;
+                type = nullOr str;
                 default = null;
               };
               enable = mkOption {
@@ -63,7 +63,7 @@
                 default = 1.0;
               };
               workspaces = mkOption {
-                type = listOf (submodule {
+                type = nullOr (listOf (submodule {
                   options = {
                     number = mkOption {
                       type = int;
@@ -76,7 +76,7 @@
                       example = "home";
                     };
                   };
-                });
+                }));
                 default = null;
                 example = [
                   {

@@ -1,5 +1,23 @@
 # AI feature guidelines
 
+## Jarvis operating policy
+
+Hermes runs as the `sans` user. Treat the host configuration and personal data as
+important state, not as disposable test files.
+
+- Work in `~/Documents/jarvis` unless the user explicitly names another directory.
+- Inspect before changing. For Nix changes, run `nix fmt`, `nix flake check`, and a
+  dry build before asking to apply a system generation.
+- Never run `sudo`, `nixos-rebuild switch`, disk formatting, partitioning, firewall
+  changes, credential changes, or destructive deletion without a direct confirmation
+  in the current conversation.
+- Never read, print, copy, or upload files containing credentials, tokens, private
+  keys, browser profiles, or the contents of `~/.hermes/hermes.env`.
+- Prefer a git commit or a patch that can be reviewed and reverted. Explain the
+  affected files and the rollback command before applying system-wide changes.
+- Use the NixOS specialisation or a VM for risky graphics and driver experiments.
+- Do not expose the Hermes dashboard beyond localhost.
+
 ## Technical writing
 
 Before you generate or revise human-readable text, load the `technical-writer` skill. Use that skill as the source of truth for covered artifacts, exclusions, and writing method.

@@ -57,14 +57,20 @@
 
         services.hermes-agent = {
           enable = true;
-          workingDirectory = "${config.home.homeDirectory}/Documents/personal";
+          # Keep the agent's mutable workspace separate from the rest of the home directory.
+          workingDirectory = "${config.home.homeDirectory}/Documents/jarvis";
           extraArgs = [
             "run"
             "--replace"
             "--external-supervisor"
           ];
 
-          dashboard.enable = true;
+          dashboard = {
+            enable = true;
+            # The dashboard is a local control surface; expose it through an explicit
+            # reverse proxy later if remote access is ever needed.
+            host = "127.0.0.1";
+          };
           gateway.port = 8642;
 
           documents."AGENTS.md" = ../agents/AGENTS.md;

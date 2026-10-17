@@ -1,57 +1,90 @@
-# my nixOS flake
+# NixOS `sprizan`
 
-this repository contains the nixOS and home-manager configuration for my desktop.
+Персональная конфигурация NixOS и Home Manager для настольного компьютера Sans.
+Система готовится к установке; идентификаторы дисков и параметры оборудования
+нужно подтвердить на целевой машине до первой активации.
 
-## what is included
+Проект создан на основе [`redxtech/nixfiles`](https://github.com/redxtech/nixfiles),
+персональной конфигурации NixOS и Home Manager. Эта версия адаптирована и
+дорабатывается для компьютера `sprizan`; исходный проект остаётся указанным как
+основа и источник унаследованного кода.
 
-- a nixOS and home-manager configuration for one host, `sprizan`:
-  - msi a520m-a pro, ryzen 5 5600, rtx 3080 (open kernel modules), 32gb ddr4
-  - three monitors: 2560x1440@180 (primary), 1920x1080, 1080x1920 (rotated)
-  - dual boot with windows 11. windows keeps its own 200mb esp, nixos has a
-    separate 1gb esp, and windows is booted from the firmware boot menu (f11)
-- feature-based configuration through [den](https://github.com/denful/den) aspects
-  - `base` provides shared system and user configuration.
-  - `workstation` adds the graphical desktop, applications, audio, gaming, and related services.
-- custom packages, modules, scripts, and nix library functions
+## Система
 
-the workstation configuration uses niri, noctalia, fish, neovim, kitty, and firefox nightly.
+- Хост: `sprizan`, пользователь: `sans`
+- Материнская плата MSI A520M-A PRO; CPU Ryzen 5 5600; GPU RTX 3080 с открытыми
+  модулями ядра NVIDIA; 32 ГБ DDR4
+- Три монитора: 2560x1440 180 Гц, 1920x1080 и вертикальный 1080x1920
+- Windows 11 и NixOS используют один NVMe. У Windows остаётся собственный EFI
+  раздел; для NixOS нужен отдельный EFI-раздел. Windows выбирается через меню
+  прошивки.
+- Графическая среда: Niri и Noctalia; также Fish, Neovim, Kitty и Firefox Nightly
 
-## structure
+## Структура
 
-- `modules/features`: shared, workstation, gpu, and AI aspects
-- `modules/hosts`: host definitions and file-system configuration
-- `modules/users`: user aspects and user-specific configuration
-- `packages`: custom flake packages
-- `lib`: nix functions used by the configuration
+- `modules/features/`: общие аспекты, workstation, GPU и AI
+- `modules/hosts/sprizan/`: параметры хоста, дисков и оборудования
+- `modules/users/sans/`: пользовательская конфигурация
+- `packages/`: локальные пакеты
+- `lib/`: вспомогательные функции Nix
+- `docs/`: рабочая документация и исследования
 
-`flake-file` generates `flake.nix` from declarations next to the modules that use them. `import-tree` loads the modules and packages.
+Конфигурация использует dendritic pattern с [`den`](https://github.com/denful/den).
+`import-tree` загружает модули и пакеты. `flake-file` генерирует `flake.nix` из
+объявлений рядом с использующим их кодом. Меняйте объявления входов и запускайте
+`nix run .#write-flake`, не редактируйте сгенерированный flake вручную.
 
-## secrets
+## Подготовка к установке
 
-there is no secrets manager here. sops-nix and age were removed because every
-secret was encrypted to a yubikey that does not exist any more.
+1. В установщике NixOS определите нужные разделы и запишите их UUID. Не
+   форматируйте и не используйте EFI-раздел Windows.
+2. Укажите проверенные UUID корневого раздела NixOS и его EFI-раздела в
+   `modules/hosts/sprizan/filesystem.nix`.
+3. Сверьте имена разъёмов мониторов и остальные параметры с реальным компьютером.
+4. Выполните `nix run .#write-flake`, `nix fmt`, eval конфигурации и сборку без
+   активации. Устанавливайте только после успешных проверок.
+5. После первой загрузки замените временный пароль на хешированный и удалите
+   `initialPassword` из конфигурации.
 
-the one exception is hermes, which reads an optional plain environment file from
-`~/.hermes/hermes.env`. create it with mode `0600` and rebuild, and the service
-picks it up.
+Сейчас репозиторий редактируется из Windows, где Nix не установлен. Eval, сборку,
+установку и проверки оборудования необходимо выполнять в среде с Nix, например в
+установщике или на целевой машине.
 
-## common commands
+## Ограничения
 
-the flake's devShell provides the repository tools and the `nrs` rebuild alias.
+- `flake.nix` генерируется автоматически; вручную его не редактировать.
+- Параметры конкретной машины размещать в конфигурации хоста или включённых им
+  аспектах.
+- EFI-раздел Windows принадлежит Windows. Не объявлять весь NVMe как диск для
+  форматирования или разметки.
+- Не добавлять sops, age или другой менеджер секретов. Локальные секреты хранить
+  вне Nix store.
+- Интеграция Hermes ещё не завершена. Его dashboard должен оставаться доступным
+  только на localhost; guardrails агента не заменяют проверку системных изменений.
 
-```fish
-# rebuild the current host
-nrs
+## Команды
 
-# rebuild a named host
-nh os switch .#sprizan
-
-# format the repository
-nix fmt
-
-# regenerate flake.nix after a flake-file declaration changes
+```sh
+# Пересоздать flake.nix после изменения объявлений входов
 nix run .#write-flake
 
-# regenerate noctalia's config after making changes via the ui
+# Форматировать Nix
+nix fmt
+
+# Проверить и собрать конфигурацию без переключения поколения
+nix eval .#nixosConfigurations.sprizan.config.system.build.toplevel.drvPath
+nix build .#nixosConfigurations.sprizan.config.system.build.toplevel
+
+# На установленной системе переключать только после проверки сборки
+nh os switch .#sprizan
+
+# Пересоздать конфигурацию Noctalia после изменений через UI
 nix run .#write-noctalia
 ```
+
+Актуальное состояние работ, блокеры и следующие шаги описаны в
+[`HANDOFF.md`](HANDOFF.md).
+
+## packages
+
+<!-- Package list is maintained by `nix run .#packages-to-readme`. -->

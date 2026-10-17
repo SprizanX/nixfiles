@@ -28,7 +28,7 @@ jobs:
       - name: configure cachix uploads
         uses: cachix/cachix-action@v17
         with:
-          name: gabedunn
+          name: sprizanx
           signingKey: "${{ secrets.CACHIX_SIGNING_KEY }}"
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
           skipPush: false

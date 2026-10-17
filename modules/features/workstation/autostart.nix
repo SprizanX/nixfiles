@@ -48,24 +48,10 @@
         ];
       in
       {
-        options.workstation.autostart = {
-          networkMounts = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-            description = "Whether to mount remote filesystems at graphical login.";
-          };
-
-          spotify = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-            description = "Whether to start Spotify at graphical login.";
-          };
-
-          thunderbird = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-            description = "Whether to start Thunderbird at graphical login.";
-          };
+        options.workstation.autostart.spotify = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Whether to start Spotify at graphical login.";
         };
 
         config = {
@@ -89,16 +75,7 @@
           programs.niri.settings.spawn-at-startup = [
             { argv = [ (lib.getExe' pkgs.nirius "niriusd") ]; }
             { argv = [ (lib.getExe config.programs.obsidian.package) ]; }
-          ]
-          ++ lib.optional cfg.networkMounts {
-            argv = [
-              (lib.getExe pkgs.sftpman)
-              "mount_all"
-            ];
-          }
-          ++ lib.optional cfg.thunderbird {
-            argv = [ (lib.getExe config.programs.thunderbird.package) ];
-          };
+          ];
         };
       };
   };

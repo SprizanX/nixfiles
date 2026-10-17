@@ -79,11 +79,6 @@
           # };
         };
 
-        signing = {
-          signByDefault = true;
-          key = "1FBF2D806C456BB6";
-        };
-
         includes = [ { path = "${config.xdg.configHome}/git/gitconfig.local"; } ];
       };
 

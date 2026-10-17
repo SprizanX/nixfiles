@@ -189,6 +189,11 @@
             PrivateTmp = true;
             ProtectHome = false;
             ProtectSystem = "strict";
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            RestrictSUIDSGID = true;
+            LockPersonality = true;
             ReadWritePaths = [
               gatewayHome
               workingDirectory
@@ -638,6 +643,11 @@
                     PrivateTmp = true;
                     ProtectHome = false;
                     ProtectSystem = "strict";
+                    ProtectKernelTunables = true;
+                    ProtectKernelModules = true;
+                    ProtectControlGroups = true;
+                    RestrictSUIDSGID = true;
+                    LockPersonality = true;
                     ReadWritePaths = [
                       hermesHome
                       cfg.workingDirectory

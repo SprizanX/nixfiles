@@ -7,7 +7,7 @@
         type = listOf (submodule {
           options = {
             name = lib.mkOption {
-              type = str;
+              type = nullOr str;
               default = null;
               example = "Headphones";
               description = "The name of the audio device";
@@ -21,7 +21,7 @@
               description = "The type of the audio device";
             };
             matches = lib.mkOption {
-              type = str;
+              type = nullOr str;
               default = null;
               description = "The glob to match against the devices";
               example = "alsa_output.pci-0000_1e_00*";
